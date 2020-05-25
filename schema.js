@@ -1,7 +1,7 @@
 // type definition
 exports.typeDefs = ` 
  type Recipe {
-    _id: ID
+    _id: ID!
     name: String!
     category: String!
     description: String!
@@ -22,6 +22,8 @@ exports.typeDefs = `
  
  type Query {
      getAllRecipes: [Recipe]
+     getRecipe(_id: ID!): Recipe
+     searchRecipes(searchTerm: String) : [Recipe]
      getCurrentUser: User
  }
  

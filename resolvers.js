@@ -9,7 +9,7 @@ const createToken = (user, secret, expiresIn) => {
 exports.resolvers = {
     Query: {
         getAllRecipes: async (_, args, {Recipe}) => {
-            return await Recipe.find();
+            return await Recipe.find().sort({createdDate: 'desc'});
         },
         getCurrentUser: async (_, args, {currentUser, User}) => {
             if (!currentUser) {
@@ -20,7 +20,25 @@ exports.resolvers = {
                 model: 'Recipe'
             });
             return user;
+        },
+        getRecipe: async (_, {_id}, {Recipe}) => {
+            return await Recipe.findOne({_id});
+        },
+        searchRecipes: async (_, {searchTerm}, {Recipe}) => {
+            if (searchTerm) {
+                const searchResults = await Recipe.find({
+                    $text: { $search: searchTerm}
+                }, {
+                    score: {$meta: "textScore"}
+                }).sort({
+                    score: {$meta: "textScore"}
+                });
+                return searchResults;
+            } else {
+                return await Recipe.find().sort({likes: 'desc', createdDate: 'desc'})
+            }
         }
+
     },
     Mutation: {
         addRecipe: async (_, {name, description, category, instructions, username}, {Recipe}) => {
