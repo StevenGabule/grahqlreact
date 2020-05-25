@@ -22,7 +22,8 @@ const schema = makeExecutableSchema({
 // connect to database
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 }).then(() => console.log("Database connected"))
     .catch(err => console.error(err));
 
@@ -46,7 +47,6 @@ app.use(async (req, res, next) => {
             const currentUser = await jwt.verify(token, process.env.SECRET);
             req.currentUser = currentUser;
         } catch (e) {
-            console.error(e)
         }
     }
     next();

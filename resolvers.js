@@ -85,5 +85,10 @@ exports.resolvers = {
 
             return {token: createToken(user, process.env.SECRET, '1hr')}
         },
+
+        deleteUserRecipe: async (_, {_id}, {Recipe}) => {
+            return await Recipe.findOneAndRemove({_id});
+        }
+
     }
 };
