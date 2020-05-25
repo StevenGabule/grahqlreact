@@ -37,6 +37,13 @@ exports.resolvers = {
             } else {
                 return await Recipe.find().sort({likes: 'desc', createdDate: 'desc'})
             }
+        },
+
+        getUserRecipes: async (_, {username}, { Recipe}) => {
+            const userRecipes = await Recipe.find({username}).sort({
+                createdDate: 'desc'
+            });
+            return userRecipes;
         }
 
     },
